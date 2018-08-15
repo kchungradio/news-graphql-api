@@ -31,11 +31,16 @@ module.exports = {
     author: ({ author_id }, _, { db }) => db.news.users.findOne(author_id),
     audio: ({ audio_id }, _, { db }) => db.news.files.findOne(audio_id),
     images: ({ image_ids }, _, { db }) =>
-      db.news.files.where('ARRAY[id] <@ $1', [image_ids])
+      db.news.files.where('ARRAY[id] <@ $1', [image_ids]),
+    publishedAt: ({ published_at }) => published_at
   },
 
   Author: {
     stories: ({ id }, _, { db }) => db.news.stories.find({ author_id: id })
+  },
+
+  File: {
+    ogFilename: ({ og_filename }) => og_filename
   }
 }
 

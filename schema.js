@@ -12,7 +12,7 @@ module.exports = gql`
     location: String
     series: String
     tags: [String!]
-    published_at: Date
+    publishedAt: Date
   }
 
   input StoryInput {
@@ -24,7 +24,7 @@ module.exports = gql`
     location: String
     series: String
     tags: [String!]
-    published_at: String
+    publishedAt: String
   }
 
   input StoryUpdateInput {
@@ -33,7 +33,7 @@ module.exports = gql`
     location: String
     series: String
     tags: [String!]
-    published_at: String
+    publishedAt: String
   }
 
   type Author {
@@ -46,13 +46,13 @@ module.exports = gql`
   type File {
     id: ID!
     filename: String!
-    og_filename: String
+    ogFilename: String
     mimetype: String
   }
 
   input FileInput {
     filename: String!
-    og_filename: String!
+    ogFilename: String!
   }
 
   scalar Date
