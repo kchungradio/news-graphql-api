@@ -1,0 +1,6 @@
+{
+  "dotenv": true,
+  "env": {
+    "PGPASSWORD": "@kchung-pg-password"
+  }
+}

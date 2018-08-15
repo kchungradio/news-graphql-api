@@ -1,0 +1,23 @@
+{
+  "name": "kchung-newsbody-graphql-server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "apollo-server": "^2.0.0",
+    "dotenv": "^6.0.0",
+    "graphql": "^0.13.2",
+    "massive": "^5.1.3",
+    "now-env": "^3.1.0",
+    "slugify": "^1.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.3",
+    "prettier-standard": "^8.0.1",
+    "standard": "^11.0.1"
+  },
+  "scripts": {
+    "dev": "nodemon --exec node index.js",
+    "start": "NODE_ENV=production node index.js"
+  }
+}
