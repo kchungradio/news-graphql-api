@@ -1,4 +1,6 @@
 {
+  "name": "kchung-newsbody-graphql-server",
+  "alias": "gql.kchung.news",
   "dotenv": true,
   "env": {
     "PGPASSWORD": "@kchung-pg-password"
