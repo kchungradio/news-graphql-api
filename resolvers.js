@@ -34,19 +34,20 @@ module.exports = {
   },
 
   Story: {
-    author: ({ author_id }, _, { db }) => db.news.users.findOne(author_id),
-    audio: ({ audio_id }, _, { db }) => db.news.files.findOne(audio_id),
-    images: ({ image_ids }, _, { db }) =>
-      db.news.files.where('ARRAY[id] <@ $1', [image_ids]),
-    publishedAt: ({ published_at }) => published_at
+    author: (story, _, { db }) => db.news.users.findOne(story.author_id),
+    audio: (story, _, { db }) => db.news.files.findOne(story.audio_id),
+    images: (story, _, { db }) =>
+      db.news.files.where('ARRAY[id] <@ $1', [story.image_ids]),
+    publishedAt: story => story.published_at
   },
 
   Author: {
-    stories: ({ id }, _, { db }) => db.news.stories.find({ author_id: id })
+    stories: (author, _, { db }) =>
+      db.news.stories.find({ author_id: author.id })
   },
 
   File: {
-    ogFilename: ({ og_filename }) => og_filename
+    ogFilename: file => file.og_filename
   }
 }
 
