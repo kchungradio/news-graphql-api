@@ -60,6 +60,7 @@ module.exports = gql`
   type Query {
     stories: [Story]
     story(id: Int!): Story
+    storiesByAuthorSlug(slug: String!): [Story]
     authors: [Author]
     author(id: Int!): Author
   }

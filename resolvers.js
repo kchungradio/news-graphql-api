@@ -6,14 +6,20 @@ const slugify = require('./lib/slugify')
 
 const APP_NAME = 'graphql-server'
 
+const dateDesc = {
+  order: [
+    {
+      field: 'published_at',
+      direction: 'desc'
+    }
+  ]
+}
+
 module.exports = {
   Query: {
-    stories: (r, a, { db }) =>
-      db.news.stories
-        .find()
-        .then(s =>
-          s.sort((a, b) => new Date(b.published_at) - new Date(a.published_at))
-        ),
+    stories: (r, a, { db }) => db.news.stories.find({}, dateDesc),
+    storiesByAuthorSlug: (r, { slug }, { db }) =>
+      db.storiesByAuthorSlug({ slug }),
     story: (r, { id }, { db }) => db.news.stories.findOne(id),
     authors: (r, a, { db }) => db.news.users.find(),
     author: (r, { id }, { db }) => db.news.users.findOne(id)
