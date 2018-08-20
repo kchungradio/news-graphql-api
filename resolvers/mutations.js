@@ -6,7 +6,7 @@ const slugify = require('../lib/slugify')
 
 const APP_NAME = 'graphql-server'
 
-async function createStory (_, { input }, { db }) {
+async function addStory (_, { input }, { db }) {
   // TODO input.author_id = ctx.jwt.sub
 
   input.slug = slugify(input.title)
@@ -78,7 +78,7 @@ const insertFiles = (db, files) =>
   Promise.all(files.map(file => insertFile(db, file)))
 
 module.exports = {
-  createStory,
+  addStory,
   updateStory,
   updateStoryAudio,
   updateStoryImages,

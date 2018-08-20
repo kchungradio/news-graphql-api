@@ -1,5 +1,5 @@
 const {
-  createStory,
+  addStory,
   updateStory,
   updateStoryAudio,
   updateStoryImages,
@@ -26,7 +26,7 @@ module.exports = {
   },
 
   Mutation: {
-    createStory,
+    addStory,
     updateStory,
     updateStoryAudio,
     updateStoryImages,

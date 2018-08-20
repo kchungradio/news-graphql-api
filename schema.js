@@ -66,7 +66,7 @@ module.exports = gql`
   }
 
   type Mutation {
-    createStory(input: StoryInput!): Story
+    addStory(input: StoryInput!): Story
     updateStory(id: Int!, input: StoryUpdateInput!): Story
     updateStoryAudio(id: Int!, input: FileInput!): Story
     updateStoryImages(id: Int!, input: [FileInput!]!): Story
