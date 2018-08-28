@@ -2,7 +2,7 @@ const { gql } = require('apollo-server')
 
 module.exports = gql`
   type Story {
-    id: ID!
+    id: Int!
     author: Author
     audio: File!
     images: [File!]
@@ -37,7 +37,7 @@ module.exports = gql`
   }
 
   type Author {
-    id: ID!
+    id: Int!
     name: String
     slug: String
     stories: [Story!]
@@ -46,13 +46,13 @@ module.exports = gql`
   type File {
     id: ID!
     filename: String!
-    ogFilename: String
+    originalFilename: String
     mimetype: String
   }
 
   input FileInput {
     filename: String!
-    ogFilename: String!
+    originalFilename: String!
   }
 
   scalar Date

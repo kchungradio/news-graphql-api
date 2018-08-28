@@ -47,6 +47,6 @@ module.exports = {
   },
 
   File: {
-    ogFilename: file => file.og_filename
+    originalFilename: file => file.og_filename
   }
 }
