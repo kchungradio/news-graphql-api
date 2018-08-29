@@ -16,7 +16,6 @@ module.exports = gql`
   }
 
   input StoryInput {
-    author_id: Int! # TODO delete
     title: String!
     audio: FileInput!
     images: [FileInput!]

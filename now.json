@@ -3,6 +3,7 @@
   "alias": "gql.kchung.news",
   "dotenv": true,
   "env": {
+    "JWS_SECRET": "@kchung-jws-secret",
     "PGPASSWORD": "@kchung-pg-password"
   }
 }

@@ -6,14 +6,13 @@ const slugify = require('../lib/slugify')
 
 const APP_NAME = 'graphql-server'
 
-async function addStory (_, { input }, { db }) {
-  // TODO input.author_id = ctx.jwt.sub
+async function addStory (_, { input }, { db, user }) {
+  if (!user) throw new ApolloError('Unauthorized', 401)
 
+  input.author_id = user.id
   input.slug = slugify(input.title)
-
   input.audio_id = await insertFile(db, input.audio)
   delete input.audio
-
   if (input.images) {
     input.image_ids = await insertFiles(db, input.images)
     delete input.images
@@ -22,10 +21,13 @@ async function addStory (_, { input }, { db }) {
   return db.news.stories.insert({ ...input, created_by: APP_NAME })
 }
 
-async function updateStory (_, { id, input }, { db }) {
+async function updateStory (_, { id, input }, { db, user }) {
+  if (!user) throw new ApolloError('Unauthorized', 401)
+
   const story = await db.news.stories.findOne(id)
-  // TODO make sure ctx.jwt.sub matches story.author_id
+
   if (!story) throw new ApolloError(`Story doesn't exist`, 404)
+  if (user.id !== story.author_id) throw new ApolloError('Unauthorized', 401)
 
   if (input.title && input.title !== story.title) {
     input.slug = slugify(input.title)
@@ -34,10 +36,13 @@ async function updateStory (_, { id, input }, { db }) {
   return db.news.stories.update(id, { ...input, updated_by: APP_NAME })
 }
 
-async function updateStoryAudio (_, { id, input }, { db }) {
+async function updateStoryAudio (_, { id, input }, { db, user }) {
+  if (!user) throw new ApolloError('Unauthorized', 401)
+
   const story = await db.news.stories.findOne(id)
-  // TODO make sure ctx.jwt.sub matches story.author_id
+
   if (!story) throw new ApolloError(`Story doesn't exist`, 404)
+  if (user.id !== story.author_id) throw new ApolloError('Unauthorized', 401)
 
   const audio_id = await insertFile(db, input)
   const updatedStory = await db.news.stories.update(id, { audio_id })
@@ -46,10 +51,13 @@ async function updateStoryAudio (_, { id, input }, { db }) {
   return updatedStory
 }
 
-async function updateStoryImages (_, { id, input }, { db }) {
+async function updateStoryImages (_, { id, input }, { db, user }) {
+  if (!user) throw new ApolloError('Unauthorized', 401)
+
   const story = await db.news.stories.findOne(id)
-  // TODO make sure ctx.jwt.sub matches story.author_id
+
   if (!story) throw new ApolloError(`Story doesn't exist`, 404)
+  if (user.id !== story.author_id) throw new ApolloError('Unauthorized', 401)
 
   const image_ids = await insertFiles(db, input)
   const updatedStory = await db.news.stories.update(id, { image_ids })
@@ -58,10 +66,13 @@ async function updateStoryImages (_, { id, input }, { db }) {
   return updatedStory
 }
 
-async function deleteStory (_, { id }, { db }) {
+async function deleteStory (_, { id }, { db, user }) {
+  if (!user) throw new ApolloError('Unauthorized', 401)
+
   const story = await db.news.stories.findOne(id)
-  // TODO make sure ctx.jwt.sub matches story.author_id
+
   if (!story) throw new ApolloError(`Story doesn't exist`, 404)
+  if (user.id !== story.author_id) throw new ApolloError('Unauthorized', 401)
 
   // delete story and files, in that order
   const deletedStory = await db.news.stories.destroy(id)

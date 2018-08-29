@@ -1,12 +1,14 @@
 require('now-env')
 require('dotenv').config()
 
+const jwt = require('jsonwebtoken')
+
 // TODO validate jwt (for all mutations)
 // TODO error if invalid
 // TODO pass validated jwt to context
 
 const massive = require('massive')
-const { ApolloServer } = require('apollo-server')
+const { ApolloServer, ApolloError } = require('apollo-server')
 
 const typeDefs = require('./schema')
 const resolvers = require('./resolvers')
@@ -23,7 +25,22 @@ massive({
     const server = new ApolloServer({
       typeDefs,
       resolvers,
-      context: ({ req }) => ({ db })
+      context: ({ req }) => {
+        const [bearer, token] = req.headers.authorization.split(' ')
+
+        let user
+        if (bearer === 'Bearer') {
+          try {
+            user = jwt.verify(token, process.env.JWS_SECRET)
+          } catch (err) {
+            if (req.body.query.includes('mutation')) {
+              throw new ApolloError('Unauthorized', 401)
+            }
+          }
+        }
+
+        return { db, user }
+      }
     })
 
     server.listen().then(({ url }) => {
