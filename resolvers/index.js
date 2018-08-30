@@ -1,10 +1,4 @@
-const {
-  addStory,
-  updateStory,
-  updateStoryAudio,
-  updateStoryImages,
-  deleteStory
-} = require('./mutations')
+const { addStory, updateStory, deleteStory } = require('./mutations')
 
 const dateDesc = {
   order: [
@@ -20,7 +14,8 @@ module.exports = {
     stories: (r, a, { db }) => db.news.stories.find({}, dateDesc),
     storiesByAuthorSlug: (r, { slug }, { db }) =>
       db.storiesByAuthorSlug({ slug }),
-    story: (r, { id }, { db }) => db.news.stories.findOne(id),
+    storyById: (r, { id }, { db }) => db.news.stories.findOne(id),
+    storyBySlug: (r, { slug }, { db }) => db.news.stories.findOne({ slug }),
     authors: (r, a, { db }) => db.news.users.find(),
     author: (r, { id }, { db }) => db.news.users.findOne(id)
   },
@@ -28,8 +23,6 @@ module.exports = {
   Mutation: {
     addStory,
     updateStory,
-    updateStoryAudio,
-    updateStoryImages,
     deleteStory
   },
 

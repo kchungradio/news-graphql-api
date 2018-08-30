@@ -12,10 +12,8 @@ async function addStory (_, { input }, { db, user }) {
   input.author_id = user.id
   input.slug = slugify(input.title)
   input.audio_id = await insertFile(db, input.audio)
-  delete input.audio
   if (input.images) {
     input.image_ids = await insertFiles(db, input.images)
-    delete input.images
   }
 
   return db.news.stories.insert({ ...input, created_by: APP_NAME })
@@ -33,37 +31,20 @@ async function updateStory (_, { id, input }, { db, user }) {
     input.slug = slugify(input.title)
   }
 
+  if (input.audio && !input.audio.id) {
+    input.audio_id = await insertFile(db, input.audio)
+  }
+
+  if (input.images) {
+    const existingImages = input.images.filter(i => i.id)
+    const newImages = input.images.filter(i => !i.id)
+
+    input.image_ids = existingImages.map(i => i.id)
+    const newIds = await insertFiles(db, newImages)
+    input.image_ids.concat(newIds)
+  }
+
   return db.news.stories.update(id, { ...input, updated_by: APP_NAME })
-}
-
-async function updateStoryAudio (_, { id, input }, { db, user }) {
-  if (!user) throw new ApolloError('Unauthorized', 401)
-
-  const story = await db.news.stories.findOne(id)
-
-  if (!story) throw new ApolloError(`Story doesn't exist`, 404)
-  if (user.id !== story.author_id) throw new ApolloError('Unauthorized', 401)
-
-  const audio_id = await insertFile(db, input)
-  const updatedStory = await db.news.stories.update(id, { audio_id })
-  db.news.files.destroy(story.audio_id)
-
-  return updatedStory
-}
-
-async function updateStoryImages (_, { id, input }, { db, user }) {
-  if (!user) throw new ApolloError('Unauthorized', 401)
-
-  const story = await db.news.stories.findOne(id)
-
-  if (!story) throw new ApolloError(`Story doesn't exist`, 404)
-  if (user.id !== story.author_id) throw new ApolloError('Unauthorized', 401)
-
-  const image_ids = await insertFiles(db, input)
-  const updatedStory = await db.news.stories.update(id, { image_ids })
-  db.news.files.destroy({ id: story.image_ids })
-
-  return updatedStory
 }
 
 async function deleteStory (_, { id }, { db, user }) {
@@ -76,14 +57,21 @@ async function deleteStory (_, { id }, { db, user }) {
 
   // delete story and files, in that order
   const deletedStory = await db.news.stories.destroy(id)
-  const fileIds = [story.audio_id, ...story.image_ids]
+  const imageIds = story.image_ids ? story.image_ids : []
+  const fileIds = [story.audio_id, ...imageIds]
   await db.news.files.destroy({ id: fileIds })
 
   return deletedStory
 }
 
 const insertFile = (db, file) =>
-  db.news.files.insert({ ...file, created_by: APP_NAME }).then(res => res.id)
+  db.news.files
+    .insert({
+      ...file,
+      og_filename: file.originalFilename,
+      created_by: APP_NAME
+    })
+    .then(res => res.id)
 
 const insertFiles = (db, files) =>
   Promise.all(files.map(file => insertFile(db, file)))
@@ -91,7 +79,5 @@ const insertFiles = (db, files) =>
 module.exports = {
   addStory,
   updateStory,
-  updateStoryAudio,
-  updateStoryImages,
   deleteStory
 }

@@ -28,6 +28,8 @@ module.exports = gql`
 
   input StoryUpdateInput {
     title: String
+    audio: FileUpdateInput
+    images: [FileUpdateInput!]
     description: String
     location: String
     series: String
@@ -54,11 +56,18 @@ module.exports = gql`
     originalFilename: String!
   }
 
+  input FileUpdateInput {
+    id: ID
+    filename: String!
+    originalFilename: String!
+  }
+
   scalar Date
 
   type Query {
     stories: [Story]
-    story(id: Int!): Story
+    storyById(id: Int!): Story
+    storyBySlug(slug: String!): Story
     storiesByAuthorSlug(slug: String!): [Story]
     authors: [Author]
     author(id: Int!): Author
@@ -67,8 +76,6 @@ module.exports = gql`
   type Mutation {
     addStory(input: StoryInput!): Story
     updateStory(id: Int!, input: StoryUpdateInput!): Story
-    updateStoryAudio(id: Int!, input: FileInput!): Story
-    updateStoryImages(id: Int!, input: [FileInput!]!): Story
     deleteStory(id: Int!): Story
   }
 `
