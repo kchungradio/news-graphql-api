@@ -1,14 +1,9 @@
 require('now-env')
 require('dotenv').config()
 
-const jwt = require('jsonwebtoken')
-
-// TODO validate jwt (for all mutations)
-// TODO error if invalid
-// TODO pass validated jwt to context
-
 const massive = require('massive')
 const { ApolloServer, ApolloError } = require('apollo-server')
+const jwt = require('jsonwebtoken')
 
 const typeDefs = require('./schema')
 const resolvers = require('./resolvers')
@@ -25,6 +20,10 @@ massive({
     const server = new ApolloServer({
       typeDefs,
       resolvers,
+      formatError: error => {
+        console.log(error)
+        return error
+      },
       context: ({ req }) => {
         const [bearer, token] = req.headers.authorization.split(' ')
 
