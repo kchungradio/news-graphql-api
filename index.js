@@ -28,7 +28,7 @@ massive({
         const [bearer, token] = req.headers.authorization.split(' ')
 
         let user
-        if (bearer === 'Bearer') {
+        if (bearer === 'Bearer' && token) {
           try {
             user = jwt.verify(token, process.env.JWS_SECRET)
           } catch (err) {
@@ -39,7 +39,8 @@ massive({
         }
 
         return { db, user }
-      }
+      },
+      cors: true
     })
 
     server.listen().then(({ url }) => {
