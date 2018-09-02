@@ -1,7 +1,7 @@
 {
-  "name": "kchung-newsbody-graphql-server",
-  "version": "1.0.0",
-  "main": "index.js",
+  "name": "kchung-news-graphql-api",
+  "description": "KCHUNG Newsbody GraphQL API",
+  "author": "Tim Phillips <tim@kchungradio.org>",
   "license": "MIT",
   "dependencies": {
     "apollo-server": "^2.0.0",

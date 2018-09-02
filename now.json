@@ -1,9 +1,8 @@
 {
-  "name": "kchung-newsbody-graphql-server",
-  "alias": "gql.kchung.news",
+  "alias": "https://graphql.api.kchung.news",
   "dotenv": true,
   "env": {
     "JWS_SECRET": "@kchung-jws-secret",
-    "PGPASSWORD": "@kchung-pg-password"
+    "PGPASSWORD": "@kchung-news_api-pg-password"
   }
 }
