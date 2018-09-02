@@ -3,7 +3,7 @@ const { gql } = require('apollo-server')
 module.exports = gql`
   type Story {
     id: Int!
-    author: Author
+    author: Author!
     audio: File!
     images: [File!]
     title: String!
@@ -39,15 +39,15 @@ module.exports = gql`
 
   type Author {
     id: Int!
-    name: String
-    slug: String
+    name: String!
+    slug: String!
     stories: [Story!]
   }
 
   type File {
-    id: ID!
+    id: Int!
     filename: String!
-    originalFilename: String
+    originalFilename: String!
     mimetype: String
   }
 
@@ -57,7 +57,7 @@ module.exports = gql`
   }
 
   input FileUpdateInput {
-    id: ID
+    id: Int
     filename: String!
     originalFilename: String!
   }
@@ -77,5 +77,6 @@ module.exports = gql`
     addStory(input: StoryInput!): Story
     updateStory(id: Int!, input: StoryUpdateInput!): Story
     deleteStory(id: Int!): Story
+    updateAuthorName(id: Int!, name: String!): Author
   }
 `

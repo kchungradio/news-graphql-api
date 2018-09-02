@@ -1,4 +1,9 @@
-const { addStory, updateStory, deleteStory } = require('./mutations')
+const {
+  addStory,
+  updateStory,
+  deleteStory,
+  updateAuthorName
+} = require('./mutations')
 
 const dateDesc = {
   order: [
@@ -23,7 +28,8 @@ module.exports = {
   Mutation: {
     addStory,
     updateStory,
-    deleteStory
+    deleteStory,
+    updateAuthorName
   },
 
   Story: {
