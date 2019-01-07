@@ -25,7 +25,10 @@ massive({
         return error
       },
       context: ({ req }) => {
-        const [bearer, token] = req.headers.authorization.split(' ')
+        let bearer, token
+        if (req.headers.authorization) {
+          ;[bearer, token] = req.headers.authorization.split(' ')
+        }
 
         let user
         if (bearer === 'Bearer' && token) {
