@@ -2,6 +2,7 @@ require('now-env')
 require('dotenv').config()
 
 const massive = require('massive')
+// const monitor = require('pg-monitor')
 const { ApolloServer, ApolloError } = require('apollo-server')
 const jwt = require('jsonwebtoken')
 
@@ -17,12 +18,17 @@ massive({
   password: process.env.PGPASSWORD
 })
   .then(db => {
+    // monitor.attach(db.driverConfig)
     const server = new ApolloServer({
       typeDefs,
       resolvers,
       formatError: error => {
         console.log(error)
         return error
+      },
+      formatResponse: response => {
+        console.log(response)
+        return response
       },
       context: ({ req }) => {
         let bearer, token
