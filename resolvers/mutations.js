@@ -16,6 +16,7 @@ async function addStory (_, { input }, { db, user }) {
   if (input.images) {
     input.image_ids = await insertFiles(db, input.images)
   }
+  input.published_at = input.publishedAt
 
   return db.news.stories.insert({ ...input, created_by: APP_NAME })
 }
@@ -43,6 +44,7 @@ async function updateStory (_, { id, input }, { db, user }) {
     const newIds = await insertFiles(db, newImages)
     input.image_ids = input.image_ids.concat(newIds)
   }
+  input.published_at = input.publishedAt
 
   return db.news.stories.update(id, { ...input, updated_by: APP_NAME })
 }

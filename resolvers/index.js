@@ -5,7 +5,7 @@ const {
   updateAuthorName
 } = require('./mutations')
 
-const dateDesc = {
+const publishedAtDesc = {
   order: [
     {
       field: 'published_at',
@@ -16,7 +16,7 @@ const dateDesc = {
 
 module.exports = {
   Query: {
-    stories: (r, a, { db }) => db.news.stories.find({}, dateDesc),
+    stories: (r, a, { db }) => db.news.stories.find({}, publishedAtDesc),
     storiesByAuthorSlug: (r, { slug }, { db }) =>
       db.storiesByAuthorSlug({ slug }),
     storyById: (r, { id }, { db }) => db.news.stories.findOne(id),
