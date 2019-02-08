@@ -1,5 +1,8 @@
 {
-  "alias": "https://graphql.api.kchung.news",
+  "alias": [
+    "https://kchung-news-graphql-api.now.sh",
+    "https://graphql.kchung.news"
+  ],
   "dotenv": true,
   "env": {
     "JWS_SECRET": "@kchung-jws-secret",
